@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>إدارة المستخدمين - DAMAR SPAM</title>
+  <style>
+    body { background:#000; color:#e0f7fa; font-family:system-ui; margin:0; padding:20px; min-height:100vh; }
+    .card {
+      background:#0a0a0a;
+      border:1px solid #00ff9d30;
+      border-radius:16px;
+      padding:32px 24px;
+      max-width:480px;
+      margin:auto;
+      box-shadow:0 0 40px #00ff9d15;
+    }
+    h1 { color:#00ff9d; text-align:center; margin-bottom:24px; font-size:2.2rem; text-shadow:0 0 15px #00ff9d60; }
+    input {
+      width:100%;
+      padding:16px;
+      margin:12px 0;
+      background:#111;
+      border:1px solid #333;
+      border-radius:8px;
+      color:#fff;
+      font-size:1.1rem;
+    }
+    input:focus { border-color:#00ff9d; box-shadow:0 0 0 3px #00ff9d20; outline:none; }
+    .btn-row { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:24px 0; }
+    button {
+      padding:14px 32px;
+      font-size:1.1rem;
+      font-weight:bold;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+    }
+    .add { background:#00ff9d; color:#000; }
+    .edit { background:#3b82f6; color:#fff; }
+    .del  { background:#ef4444; color:#fff; }
+    button:hover { opacity:0.92; }
+    #msg { text-align:center; margin:16px 0; font-weight:bold; min-height:24px; }
+    .success { color:#22c55e; }
+    .error   { color:#ef4444; }
+    .list { margin-top:32px; }
+    .list h3 { color:#80deea; margin-bottom:16px; text-align:center; }
+    .user { background:#1a1a1a; padding:12px; border-radius:8px; margin:8px 0; text-align:center; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>إدارة المستخدمين</h1>
+
+  <input id="username" placeholder="اسم المستخدم" autocomplete="off" />
+  <input id="password" placeholder="كلمة المرور" autocomplete="off" />
+
+  <div class="btn-row">
+    <button class="add" onclick="add()">إضافة مستخدم</button>
+    <button class="edit" onclick="edit()">تعديل كلمة المرور</button>
+    <button class="del" onclick="del()">مسح مستخدم</button>
+  </div>
+
+  <div id="msg"></div>
+
+  <div class="list">
+    <h3>المستخدمون الحاليون</h3>
+    <div id="list"></div>
+  </div>
+</div>
+
+<script>
+  let users = JSON.parse(localStorage.getItem('damar_users')) || {
+    "ADHAM111": "KAREM111",
+    "DAMAR": "DAMAR"
+  };
+
+  function save() { localStorage.setItem('damar_users', JSON.stringify(users)); render(); }
+  function msg(t, c='') { document.getElementById('msg').textContent = t; document.getElementById('msg').className = c; }
+  function render() {
+    document.getElementById('list').innerHTML = Object.keys(users).map(k=>`<div class="user">${k}</div>`).join('');
+  }
+
+  function add() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    if (!u || !p) return msg('املأ الحقول', 'error');
+    if (users[u]) return msg('موجود بالفعل', 'error');
+    users[u] = p; save(); msg('تم الإضافة', 'success');
+  }
+
+  function edit() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    if (!u || !p) return msg('املأ الحقول', 'error');
+    if (!users[u]) return msg('غير موجود', 'error');
+    users[u] = p; save(); msg('تم التعديل', 'success');
+  }
+
+  function del() {
+    const u = document.getElementById('username').value.trim();
+    if (!u) return msg('أدخل الاسم', 'error');
+    if (!confirm(`حذف ${u} نهائياً؟`)) return;
+    if (users[u]) { delete users[u]; save(); msg('تم الحذف', 'success'); }
+    else msg('غير موجود', 'error');
+  }
+
+  render();
+</script>
+
+</body>
+</html>
