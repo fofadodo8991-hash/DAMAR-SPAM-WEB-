@@ -121,15 +121,15 @@
       localStorage.setItem("loggedIn", "true");
       localStorage.setItem("user", u);
 
-      if (u === "ADHAM111") {
-        location.href = "admin.html";
-      } else {
-        location.href = "spam.html";
-      }
-    } else {
-      err.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة";
-      err.style.display = "block";
-    }
+      if (username === "ADHAM111" && password === "KAREM111") {
+  window.location.href = "admin.html";
+} else if (users[username] === password) {
+  window.location.href = "spam.html";
+} else {
+  const err = document.querySelector(".error-msg");
+  err.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة";
+  err.style.display = "block";
+}
   });
 </script>
 
