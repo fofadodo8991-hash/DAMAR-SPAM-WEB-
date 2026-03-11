@@ -105,32 +105,34 @@
 
 <script>
   // يوزرز ثابتة (مؤقتاً)
-  const users = {
-    "ADHAM111": "KAREM111",
-    // أضف المزيد هنا إذا أردت
-  };
+  const users = JSON.parse(localStorage.getItem('damar_users')) || {
+  "ADHAM111": "KAREM111",
+  "DAMAR": "DAMAR"
+  // أضف أي يوزرز تانية هنا لو عايز
+};
 
-  document.getElementById("loginForm").addEventListener("submit", e => {
-    e.preventDefault();
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-    const u = document.querySelector('[name="username"]').value.trim();
-    const p = document.querySelector('[name="password"]').value.trim();
-    const err = document.getElementById("errorMsg");
+  const username = document.querySelector('[name="username"]').value.trim();
+  const password = document.querySelector('[name="password"]').value.trim();
+  const errorEl = document.querySelector(".error-msg");
 
-    if (users[u] === p) {
-      localStorage.setItem("loggedIn", "true");
-      localStorage.setItem("user", u);
+  if (users[username] === password) {
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("user", username);
 
-      if (username === "ADHAM111" && password === "KAREM111") {
-  window.location.href = "admin.html";
-} else if (users[username] === password) {
-  window.location.href = "spam.html";
-} else {
-  const err = document.querySelector(".error-msg");
-  err.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة";
-  err.style.display = "block";
-}
-  });
+    // الشرط اللي عايزه بالضبط
+    if (username === "ADHAM111") {
+      window.location.href = "admin.html";    // ADHAM111 يروح admin فقط
+    } else {
+      window.location.href = "spam.html";     // الباقي يروح spam فقط
+    }
+  } else {
+    errorEl.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة";
+    errorEl.style.display = "block";
+  }
+});
 </script>
 
 </body>
